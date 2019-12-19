@@ -1,0 +1,134 @@
+@using System.Collections.Generic
+@using System.Linq
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+@using Project.Controllers;
+
+@model IEnumerable<CarCity.Models.Car>
+@inject UserManager<User> UserManager
+@inject SignInManager<User> SignInManager
+@{
+    ViewData["Title"] = "Index";
+}
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <br />
+    <p>
+        @if (SignInManager.IsSignedIn(User) && user.Email.Equals("admin@gmail.com"))
+        {
+
+        }
+        else if(SignInManager.IsSignedIn(User))
+        {
+        <a asp-action="Create">Create New</a>
+        }
+        else
+        {
+
+        }
+    </p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mark)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.country)
+            </th>
+            <th>
+                Status
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.mark)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.country)
+                </td>
+                @if (item.mark.Equals(ViewBag.MyId) && ViewBag.MyId2 == null)
+                {
+                    <td>
+                        @ViewBag.MyStatus
+                    </td>
+                }
+                else if (item.mark.Equals(ViewBag.MyId2))
+                {
+                    <td>
+                        Changed to @ViewBag.MyId2
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+
+                <td>
+                    @if (SignInManager.IsSignedIn(User) && user.Email.Equals("admin@gmail.com"))
+                    {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                     
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="container">
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-6">&nbsp;</div>
+        <div class="col-6">
+            User..........<input type="text" id="userInput" />
+            <br />
+            Message...<input type="text" id="messageInput" />
+            <input type="button" id="sendButton" value="Send Message" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">&nbsp;</div>
+        <div class="col-6">
+            <ul id="messagesList"></ul>
+        </div>
+    </div>
+</div>
+<script src="~/lib/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>
+</body>
+</html>

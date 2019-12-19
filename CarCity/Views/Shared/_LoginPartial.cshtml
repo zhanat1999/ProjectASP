@@ -1,0 +1,29 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CarCity.Models
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            @UserManager.GetUserName(User)
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+            <li><a asp-area="" asp-controller="Car" asp-action="Index">Cars</a></li>
+            <li>
+                <a asp-area="" asp-controller="User" asp-action="Logout"
+                   onclick="event.preventDefault();
+         document.getElementById('logoutForm').submit();">Log out</a>
+            </li>
+            <form id="logoutForm" asp-area="" asp-controller="User" asp-action="Logout" method="post"></form>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="User" asp-action="Register">Register</a></li>
+    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="User" asp-action="Login">Log in</a></li>
+}
